@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Md. Moniruzzaman - Portfolio (Resume View)
 
-## Getting Started
+A modern, single-page portfolio/resume website built with Next.js, React, TypeScript, Tailwind CSS, and shadcn/ui.  
+The site presents professional profile, experience, skills, projects, achievements, and contact details in a clean resume-style format.
 
-First, run the development server:
+### Profile
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Name:** Md. Moniruzzaman
+- **Role:** Software Engineer · Frontend Developer · React Developer
+- **Location:** Dhaka, Bangladesh
+- **Email:** mdmoniruzzamanbappy@gmail.com
+- **Phone:** +8801521431212
+- **LinkedIn:** https://www.linkedin.com/in/mdmoniruzzamanbappy/
+- **GitHub:** https://github.com/MoniruzzamanBappy
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Professional Summary
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Passionate frontend-focused software engineer with experience building scalable ERP systems, e-commerce platforms, admin dashboards, and mobile applications. Strong focus on performance, usability, responsive design, and clean UI implementation.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Experience Snapshot
 
-## Learn More
+#### Software Engineer - Ampec Technologies (May 2024 - Present)
 
-To learn more about Next.js, take a look at the following resources:
+- Built scalable ERP/operations modules (project management, procurement, invoicing, reminders, scheduling).
+- Improved cash flow and operational efficiency through automation and dashboard visibility.
+- Implemented role-based access control (RBAC), import/export flows, and performance-focused responsive interfaces.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Frontend Engineer - HealthOS (Sep 2022 - Apr 2024)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Delivered e-commerce, procurement, and delivery tracking products.
+- Improved revenue through feature delivery (notifications, deep links, admin capabilities).
+- Contributed to security, testing, mentoring, and frontend performance optimization.
 
-## Deploy on Vercel
+### Featured Projects
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Grain Marketplace (2024)** - Multi-role grain trading platform (web/mobile).
+- **Light House (2023)** - E-commerce admin dashboard with secure access and advanced filtering.
+- **Reporter (2023)** - Delivery management mobile app with real-time operational updates.
+- **TEC-PORTAL (2024)** - Cloud-based operations portal for workflow, inventory, and invoicing automation.
+- **Crafty Soft UI / Dashboard Projects (2025)** - Modern UI systems and dashboard-focused frontend work.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Achievements
+
+- Smart City Hackathon 2024 - Semifinalist
+- Frontend Development Specialization - Coursera
+- Top Contributor - GSSoC 2024
+- Certified - NPTEL Cloud Computing
+
+### Skills
+
+- **Frontend Development:** React, Next.js, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend Development:** Node.js, Express.js, MongoDB
+- **Version Control:** Git
+- **Testing:** Jest, React Testing Library
+- **Deployment:** Vercel, Netlify
+
+### Education
+
+- Bachelor of Science in Computer Science, Dhaka City College
+
+## Notes
+
+- This is a frontend portfolio implementation.
+- The contact form currently handles submission on the client side (UI interaction only).
