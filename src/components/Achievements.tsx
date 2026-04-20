@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion, type Variants } from "framer-motion";
 
-import { cn } from "@/lib/utils";
 import AchievementCard from "./AchievementCard";
 import SectionHeading from "./SectionHeading";
 
@@ -33,14 +32,29 @@ const achievements = [
   },
 ];
 
+const containerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.14,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 32 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export default function Achievements() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
-
   return (
     <section id="achievements" className="relative scroll-mt-16 py-20">
       <SectionHeading
@@ -48,22 +62,19 @@ export default function Achievements() {
         subtitle="Recognition and accomplishments"
       />
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {achievements.map((achievement, index) => (
-          <div
-            key={achievement.title}
-            className={cn(
-              "translate-y-8 opacity-0 transition-all duration-700",
-              mounted && "translate-y-0 opacity-100",
-            )}
-            style={{
-              transitionDelay: mounted ? `${index * 150}ms` : "0ms",
-            }}
-          >
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
+        className="grid gap-6 md:grid-cols-2"
+      >
+        {achievements.map((achievement) => (
+          <motion.div key={achievement.title} variants={itemVariants}>
             <AchievementCard {...achievement} />
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

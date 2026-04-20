@@ -1,10 +1,9 @@
 "use client";
 
+import { motion, type Variants } from "framer-motion";
 import { Briefcase, Building2, CalendarDays, MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import SectionHeading from "./SectionHeading";
 
 const experiences = [
@@ -47,14 +46,51 @@ const experiences = [
   },
 ];
 
+const containerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.18,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.75,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const pointContainerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const pointVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export default function Experiences() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
-
   return (
     <section id="experiences" className="relative scroll-mt-16 py-24">
       <SectionHeading
@@ -65,76 +101,94 @@ export default function Experiences() {
       <div className="relative mx-auto max-w-6xl">
         <div className="absolute left-4 top-0 hidden h-full w-px bg-linear-to-b from-transparent via-teal-300/30 to-transparent md:block" />
 
-        <div className="space-y-8">
-          {experiences.map((experience, index) => (
-            <div
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+          className="space-y-8"
+        >
+          {experiences.map((experience) => (
+            <motion.div
               key={experience.company}
-              className={cn(
-                "relative translate-y-8 opacity-0 transition-all duration-700",
-                mounted && "translate-y-0 opacity-100",
-              )}
-              style={{
-                transitionDelay: mounted ? `${index * 150}ms` : "0ms",
-              }}
+              variants={cardVariants}
+              className="relative"
             >
               <div className="md:pl-14">
-                <div className="absolute left-0 top-8 hidden md:flex h-8 w-8 items-center justify-center rounded-full border border-teal-300/30 bg-white/10 backdrop-blur-xl">
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute left-0 top-8 hidden h-8 w-8 items-center justify-center rounded-full border border-teal-300/30 bg-white/10 backdrop-blur-xl md:flex"
+                >
                   <Briefcase className="h-4 w-4 text-teal-300" />
-                </div>
+                </motion.div>
 
-                <Card className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)] transition-all duration-300 hover:border-teal-300/25 hover:bg-white/10">
-                  <div className="h-px w-full bg-linear-to-r from-transparent via-teal-300/60 to-transparent" />
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <Card className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition-all duration-300 hover:border-teal-300/25 hover:bg-white/10">
+                    <div className="h-px w-full bg-linear-to-r from-transparent via-teal-300/60 to-transparent" />
 
-                  <CardContent className="p-6 md:p-8">
-                    <div className="flex flex-col gap-5">
-                      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                        <div className="space-y-2">
-                          <h3 className="text-2xl font-semibold text-white">
-                            {experience.role}
-                          </h3>
+                    <CardContent className="p-6 md:p-8">
+                      <div className="flex flex-col gap-5">
+                        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                          <div className="space-y-2">
+                            <h3 className="text-2xl font-semibold text-white">
+                              {experience.role}
+                            </h3>
 
-                          <div className="flex flex-wrap items-center gap-3 text-sm text-white/60">
-                            <span className="inline-flex items-center gap-2">
-                              <Building2 className="h-4 w-4 text-teal-300" />
-                              {experience.company}
+                            <div className="flex flex-wrap items-center gap-3 text-sm text-white/60">
+                              <span className="inline-flex items-center gap-2">
+                                <Building2 className="h-4 w-4 text-teal-300" />
+                                {experience.company}
+                              </span>
+
+                              <span className="inline-flex items-center gap-2">
+                                <MapPin className="h-4 w-4 text-teal-300" />
+                                {experience.location}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2">
+                            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium text-white/75">
+                              <CalendarDays className="h-3.5 w-3.5 text-teal-300" />
+                              {experience.duration}
                             </span>
 
-                            <span className="inline-flex items-center gap-2">
-                              <MapPin className="h-4 w-4 text-teal-300" />
-                              {experience.location}
+                            <span className="rounded-full border border-teal-300/20 bg-teal-400/10 px-3 py-1 text-xs font-medium text-teal-200">
+                              {experience.type}
                             </span>
                           </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-2">
-                          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium text-white/75">
-                            <CalendarDays className="h-3.5 w-3.5 text-teal-300" />
-                            {experience.duration}
-                          </span>
-
-                          <span className="rounded-full border border-teal-300/20 bg-teal-400/10 px-3 py-1 text-xs font-medium text-teal-200">
-                            {experience.type}
-                          </span>
-                        </div>
+                        <motion.div
+                          variants={pointContainerVariants}
+                          className="grid gap-3"
+                        >
+                          {experience.points.map((point) => (
+                            <motion.div
+                              key={point}
+                              variants={pointVariants}
+                              whileHover={{ x: 4 }}
+                              transition={{ duration: 0.2 }}
+                              className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 text-sm leading-7 text-white/75 transition-all duration-300 hover:border-teal-300/20 hover:bg-white/10"
+                            >
+                              {point}
+                            </motion.div>
+                          ))}
+                        </motion.div>
                       </div>
-
-                      <div className="grid gap-3">
-                        {experience.points.map((point) => (
-                          <div
-                            key={point}
-                            className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 text-sm leading-7 text-white/75 transition-all duration-300 hover:border-teal-300/20 hover:bg-white/10"
-                          >
-                            {point}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

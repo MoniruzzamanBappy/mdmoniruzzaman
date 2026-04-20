@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion, type Variants } from "framer-motion";
 
-import { cn } from "@/lib/utils";
 import ProjectCard from "./ProjectCard";
 import SectionHeading from "./SectionHeading";
 
@@ -143,34 +142,51 @@ const projects = [
   },
 ];
 
+const containerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.14,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 32 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export default function Projects() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
-
   return (
     <section id="projects" className="relative scroll-mt-16 py-20">
       <SectionHeading title="Projects" subtitle="Some of my recent work" />
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {projects.map((project, index) => (
-          <div
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.12 }}
+        className="grid gap-6 md:grid-cols-2"
+      >
+        {projects.map((project) => (
+          <motion.div
             key={project.title}
-            className={cn(
-              "translate-y-8 opacity-0 transition-all duration-700",
-              mounted && "translate-y-0 opacity-100",
-            )}
-            style={{
-              transitionDelay: mounted ? `${index * 150}ms` : "0ms",
-            }}
+            variants={itemVariants}
+            whileHover={{ y: -6 }}
+            transition={{ duration: 0.25 }}
           >
             <ProjectCard {...project} />
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
