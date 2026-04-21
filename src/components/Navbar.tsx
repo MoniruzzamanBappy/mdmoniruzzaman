@@ -23,50 +23,63 @@ const navItems = [
   { name: "Contact", href: "#contact" },
 ];
 
-const navContainer: Variants = {
-  hidden: { opacity: 0, y: -30 },
+// Header slides down once on load
+const headerVariants: Variants = {
+  hidden: { opacity: 0, y: -20 },
   show: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.7,
-      ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.12,
-    },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
-const navItem: Variants = {
-  hidden: { opacity: 0, y: -12 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.45,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
-
-const mobileMenuContainer: Variants = {
+// Nav links stagger in after header settles
+const navListVariants: Variants = {
   hidden: {},
   show: {
     transition: {
       staggerChildren: 0.08,
-      delayChildren: 0.08,
+      delayChildren: 0.35, // waits for header to finish
     },
   },
 };
 
-const mobileMenuItem: Variants = {
-  hidden: { opacity: 0, x: 18 },
+const navLinkVariants: Variants = {
+  hidden: { opacity: 0, y: -8 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+// Logo fades in with a slight delay
+const logoVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
+  },
+};
+
+// Mobile: re-animates every time the sheet opens (animate prop is key-driven)
+const mobileListVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.07,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const mobileItemVariants: Variants = {
+  hidden: { opacity: 0, x: 16 },
   show: {
     opacity: 1,
     x: 0,
-    transition: {
-      duration: 0.35,
-      ease: [0.22, 1, 0.36, 1],
-    },
+    transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -77,7 +90,6 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     handleScroll();
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -86,7 +98,7 @@ export default function Navbar() {
     <motion.header
       initial="hidden"
       animate="show"
-      variants={navContainer}
+      variants={headerVariants}
       className={cn(
         "fixed left-0 right-0 top-0 z-50 transition-all duration-300",
         scrolled
@@ -95,44 +107,49 @@ export default function Navbar() {
       )}
     >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-3 sm:h-15 sm:px-4 lg:px-6">
-        <motion.div variants={navItem}>
+        {/* Logo — its own variant, not inheriting stagger */}
+        <motion.div variants={logoVariants} initial="hidden" animate="show">
           <Link href="/" className="flex items-center">
             <span className="sr-only">Md. Moniruzzaman</span>
-
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-teal-300/20 bg-white/8 shadow-[0_8px_24px_rgba(45,212,191,0.14)] backdrop-blur-xl md:hidden">
               <span className="bg-linear-to-r from-teal-300 to-cyan-200 bg-clip-text text-xs font-bold tracking-wide text-transparent">
                 MB
               </span>
             </div>
-
             <div className="hidden bg-linear-to-r from-teal-300 to-cyan-200 bg-clip-text text-lg font-bold text-transparent transition-opacity hover:opacity-80 md:block">
               MB
             </div>
           </Link>
         </motion.div>
 
+        {/* Desktop nav — separate stagger orchestration */}
         <motion.nav
-          variants={navContainer}
+          initial="hidden"
+          animate="show"
+          variants={navListVariants}
           className="hidden items-center gap-7 lg:flex"
         >
           {navItems.map((item) => (
-            <motion.div
-              key={item.name}
-              variants={navItem}
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.2 }}
-            >
+            <motion.div key={item.name} variants={navLinkVariants}>
               <Link
                 href={item.href}
-                className="text-sm font-medium text-white/70 transition-colors hover:text-teal-300"
+                className="group relative text-sm font-medium text-white/70 transition-colors duration-200 hover:text-teal-300"
               >
                 {item.name}
+                {/* Underline slide-in on hover */}
+                <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-teal-300/60 transition-all duration-300 group-hover:w-full" />
               </Link>
             </motion.div>
           ))}
         </motion.nav>
 
-        <motion.div variants={navItem} className="lg:hidden">
+        {/* Mobile menu trigger */}
+        <motion.div
+          variants={logoVariants}
+          initial="hidden"
+          animate="show"
+          className="lg:hidden"
+        >
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
@@ -141,9 +158,9 @@ export default function Navbar() {
                 className="h-9 w-9 rounded-xl border border-white/10 bg-white/5 text-white/75 backdrop-blur-xl transition-all duration-300 hover:bg-white/10 hover:text-teal-300"
               >
                 <motion.div
-                  whileTap={{ scale: 0.9 }}
-                  whileHover={{ scale: 1.06 }}
-                  transition={{ duration: 0.2 }}
+                  whileTap={{ scale: 0.88 }}
+                  whileHover={{ scale: 1.08 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <Menu className="h-4.5 w-4.5" />
                 </motion.div>
@@ -162,7 +179,6 @@ export default function Navbar() {
                         MB
                       </span>
                     </div>
-
                     <div>
                       <p className="text-sm font-semibold text-white">
                         Md. Moniruzzaman
@@ -174,10 +190,16 @@ export default function Navbar() {
                   </div>
                 </div>
 
+                {/*
+                  KEY CHANGE: `animate` uses `open` as a key trigger so
+                  Framer Motion re-runs the stagger every time the sheet opens.
+                  Without this, items only animate on the very first open.
+                */}
                 <motion.div
+                  key={open ? "open" : "closed"}
                   initial="hidden"
-                  animate="show"
-                  variants={mobileMenuContainer}
+                  animate={open ? "show" : "hidden"}
+                  variants={mobileListVariants}
                   className="flex flex-1 flex-col px-4 py-5"
                 >
                   <div className="mb-3 px-2 text-[11px] uppercase tracking-[0.22em] text-white/35">
@@ -188,9 +210,8 @@ export default function Navbar() {
                     {navItems.map((item) => (
                       <motion.div
                         key={item.name}
-                        variants={mobileMenuItem}
-                        whileHover={{ x: 4 }}
-                        transition={{ duration: 0.2 }}
+                        variants={mobileItemVariants}
+                        whileHover={{ x: 5, transition: { duration: 0.15 } }}
                       >
                         <Link
                           href={item.href}

@@ -10,7 +10,7 @@ const projects = [
     title: "Grain Marketplace",
     description:
       "A multi-role grain trading marketplace for farmers, buyers, and agents to manage offers, bids, GRN verification, orders, deliveries, and real-time notifications across web and mobile.",
-    date: "2024",
+    date: "2025",
     techStack: [
       "Next.js",
       "React Native",
@@ -28,7 +28,7 @@ const projects = [
     title: "Light House",
     description:
       "An e-commerce admin dashboard for managing orders, products, offers, and employees with secure access, advanced filtering, 2-step login, and CSV export.",
-    date: "2023",
+    date: "2022-2024",
     techStack: [
       "Next.js",
       "NextAuth.js",
@@ -46,7 +46,7 @@ const projects = [
     title: "Reporter",
     description:
       "A delivery management mobile app for tracking deliveries, collecting payments, handling returns, and updating inventory in real time.",
-    date: "2023",
+    date: "2022-2024",
     techStack: ["React Native", "Expo", "MobX", "NativeBase"],
     demoUrl: "https://reporter.healthosbd.com/",
     codeUrl: "",
@@ -56,7 +56,7 @@ const projects = [
     title: "TEC-PORTAL",
     description:
       "A cloud-based operations portal that automates warehouse workflows, quotations, sales, work orders, scheduling, inventory, and invoicing with real-time operational visibility.",
-    date: "2024",
+    date: "2024-2026",
     techStack: [
       "React",
       "Vite",
@@ -142,51 +142,77 @@ const projects = [
   },
 ];
 
-const containerVariants: Variants = {
+// Row-level stagger: only 2 children per row, so max wait = 1 × 0.12 = 0.12s
+const rowVariants: Variants = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.14,
-      delayChildren: 0.1,
+      staggerChildren: 0.12,
+      delayChildren: 0,
     },
   },
 };
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 32 },
+// Card enters with a short, snappy animation
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
+      duration: 0.55,
       ease: [0.22, 1, 0.36, 1],
     },
   },
 };
 
+// Chunk projects into rows of 2 for row-level viewport triggering
+function chunkArray<T>(arr: T[], size: number): T[][] {
+  return Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
+    arr.slice(i * size, i * size + size),
+  );
+}
+
 export default function Projects() {
+  const rows = chunkArray(projects, 2);
+
   return (
     <section id="projects" className="relative scroll-mt-16 py-20">
       <SectionHeading title="Projects" subtitle="Some of my recent work" />
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.12 }}
-        className="grid gap-6 md:grid-cols-2"
-      >
-        {projects.map((project) => (
+      <div className="space-y-6">
+        {rows.map((row, rowIndex) => (
+          /*
+            Each row is its own whileInView stagger context.
+            Max stagger per row = 1 card × 0.12s = 0.12s.
+            Rows trigger independently as the user scrolls down,
+            so cards always feel immediate regardless of grid position.
+          */
           <motion.div
-            key={project.title}
-            variants={itemVariants}
-            whileHover={{ y: -6 }}
-            transition={{ duration: 0.25 }}
+            key={rowIndex}
+            variants={rowVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid gap-6 md:grid-cols-2"
           >
-            <ProjectCard {...project} />
+            {row.map((project) => (
+              <motion.div
+                key={project.title}
+                variants={cardVariants}
+                // whileHover has its own scoped transition — doesn't affect enter
+                whileHover={{
+                  y: -5,
+                  transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+                }}
+                whileTap={{ scale: 0.99, transition: { duration: 0.1 } }}
+              >
+                <ProjectCard {...project} />
+              </motion.div>
+            ))}
           </motion.div>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

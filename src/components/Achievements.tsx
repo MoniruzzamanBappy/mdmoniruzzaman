@@ -36,19 +36,19 @@ const containerVariants: Variants = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.14,
-      delayChildren: 0.1,
+      staggerChildren: 0.11, // 4 items × 0.11 = 0.33s total — snappier
+      delayChildren: 0.05,
     },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
+      duration: 0.6,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -66,11 +66,19 @@ export default function Achievements() {
         variants={containerVariants}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, amount: 0.15 }}
+        viewport={{ once: true, amount: 0.2 }}
         className="grid gap-6 md:grid-cols-2"
       >
         {achievements.map((achievement) => (
-          <motion.div key={achievement.title} variants={itemVariants}>
+          <motion.div
+            key={achievement.title}
+            variants={itemVariants}
+            whileHover={{
+              y: -5,
+              transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+            }}
+            whileTap={{ scale: 0.99, transition: { duration: 0.1 } }}
+          >
             <AchievementCard {...achievement} />
           </motion.div>
         ))}
