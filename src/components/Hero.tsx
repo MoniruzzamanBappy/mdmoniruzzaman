@@ -439,7 +439,7 @@ export default function Hero() {
               variants={fadeUp}
               className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
             >
-              <span className="bg-linear-to-r from-teal-300 via-cyan-200 to-teal-300 bg-clip-text text-transparent drop-shadow-[0_0_24px_rgba(45,212,191,0.4)] bg-[length:200%_auto] animate-[shimmer_4s_linear_infinite]">
+              <span className="bg-linear-to-r from-teal-300 via-cyan-200 to-teal-300 bg-clip-text text-transparent drop-shadow-[0_0_24px_rgba(45,212,191,0.4)] bg-size-[200%_auto] animate-[shimmer_4s_linear_infinite]">
                 Md. Moniruzzaman
               </span>
             </motion.h1>
@@ -501,9 +501,9 @@ export default function Hero() {
 
             <motion.div variants={fadeUp} className="mt-10 flex gap-8">
               {[
-                { value: "3+", label: "Years Experience" },
+                { value: "3.5+", label: "Years Experience" },
                 { value: "15+", label: "Projects Shipped" },
-                { value: "2", label: "Companies" },
+                { value: "3", label: "Companies" },
               ].map((stat) => (
                 <div key={stat.label}>
                   <p className="text-2xl font-bold text-teal-300">
